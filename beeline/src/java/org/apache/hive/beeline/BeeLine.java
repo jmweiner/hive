@@ -1138,7 +1138,7 @@ public class BeeLine implements Closeable {
   private int executeFile(String fileName) {
     InputStream fileStream = null;
     try {
-      if (!isBeeLine) {
+      //if (!isBeeLine) {
         org.apache.hadoop.fs.Path path = new org.apache.hadoop.fs.Path(fileName);
         FileSystem fs;
         HiveConf conf = getCommands().getHiveConf(true);
@@ -1149,9 +1149,9 @@ public class BeeLine implements Closeable {
           fs = FileSystem.get(path.toUri(), conf);
         }
         fileStream = fs.open(path);
-      } else {
-        fileStream = new FileInputStream(fileName);
-      }
+      //} else {
+      //  fileStream = new FileInputStream(fileName);
+      //}
       return execute(initializeConsoleReader(fileStream), !getOpts().getForce());
     } catch (Throwable t) {
       handleException(t);
@@ -1902,14 +1902,18 @@ public class BeeLine implements Closeable {
     }
 
     if (e instanceof SQLException) {
+      e.printStackTrace(getErrorStream()); //JMW
       handleSQLException((SQLException) e);
     } else if (e instanceof EOFException) {
+      e.printStackTrace(getErrorStream()); //JMW
       setExit(true);  // CTRL-D
     } else if (!(getOpts().getVerbose())) {
       if (e.getMessage() == null) {
         error(e.getClass().getName());
+        e.printStackTrace(getErrorStream()); //JMW
       } else {
         error(e.getMessage());
+        e.printStackTrace(getErrorStream()); //JMW
       }
     } else {
       e.printStackTrace(getErrorStream());
