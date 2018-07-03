@@ -1141,7 +1141,7 @@ public class BeeLine implements Closeable {
       //if (!isBeeLine) {
         org.apache.hadoop.fs.Path path = new org.apache.hadoop.fs.Path(fileName);
         FileSystem fs;
-        HiveConf conf = getCommands().getHiveConf(true);
+        HiveConf conf = getCommands().getHiveConf(true); // JMW: the JDBC HiveConnection method this drills down to is not supported
         if (!path.toUri().isAbsolute()) {
           fs = FileSystem.getLocal(conf);
           path = fs.makeQualified(path);
@@ -1154,7 +1154,7 @@ public class BeeLine implements Closeable {
       //}
       return execute(initializeConsoleReader(fileStream), !getOpts().getForce());
     } catch (Throwable t) {
-      handleException(t);
+      //handleException(t); // JMW -- this was printing a stack trace; we don't need to
       return ERRNO_OTHER;
     } finally {
       IOUtils.closeStream(fileStream);
